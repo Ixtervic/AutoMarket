@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('vehicle_details', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->foreignId('brand_id')->constrained()->onDelete('cascade');
+            $table->string('model');
+            $table->integer('year');
+            $table->string('mileage');
+            $table->string('fuel_type');
+            $table->string('transmission');
             $table->timestamps();
         });
     }
