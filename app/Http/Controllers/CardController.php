@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Colony;
+use App\Models\Card;
 use Illuminate\Http\Request;
 
-class ColonyController extends Controller
+class CardController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class ColonyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Colony $colony)
+    public function show(Card $card)
     {
         //
     }
@@ -42,7 +42,7 @@ class ColonyController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Colony $colony)
+    public function edit(Card $card)
     {
         //
     }
@@ -50,7 +50,7 @@ class ColonyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Colony $colony)
+    public function update(Request $request, Card $card)
     {
         //
     }
@@ -58,7 +58,7 @@ class ColonyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Colony $colony)
+    public function destroy(Card $card)
     {
         //
     }

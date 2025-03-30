@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Colony extends Model
+class Card extends Model
 {
-    /** @use HasFactory<\Database\Factories\ColonyFactory> */
+    /** @use HasFactory<\Database\Factories\CardFactory> */
     use HasFactory;
 }

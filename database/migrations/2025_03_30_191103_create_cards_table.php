@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('states', function (Blueprint $table) {
+        Schema::create('cards', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('country_id')->constrained()->onDelete('cascade');
+            $table->string('card_number');
+            $table->string('expiration_date');
+            $table->string('security_code');
+            $table->string('cardholder_code');
+            $table->foreignId('payment_method_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('states');
+        Schema::dropIfExists('cards');
     }
 };

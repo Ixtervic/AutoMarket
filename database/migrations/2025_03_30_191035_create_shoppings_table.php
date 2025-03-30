@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('brands', function (Blueprint $table) {
+        Schema::create('shoppings', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('status');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->enum('sale_status', ['sold_on_platform', 'sold_elsewhere', 'kept_product'])->default('sold_on_platform');
             $table->timestamps();
         });
     }
@@ -23,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('brands');
+        Schema::dropIfExists('shoppings');
     }
 };

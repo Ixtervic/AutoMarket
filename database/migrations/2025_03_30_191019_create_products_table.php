@@ -15,14 +15,16 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
+            $table->foreignId('brand_id')->constrained()->onDelete('cascade');
+            $table->string('model');
+            $table->integer('year');
+            $table->string('mileage');
+            $table->string('fuel_type');
+            $table->string('transmission');
             $table->decimal('price', 10, 2);
-            $table->integer('stock')->default(1);
-            $table->enum('status', ['available', 'sold', 'reserved'])->default('available');
-            $table->string('possible_locations')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->foreignId('brand_id')->constrained()->onDelete('cascade');
-            $table->boolean('is_vehicle')->default(false);
+            $table->foreignId('location_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
