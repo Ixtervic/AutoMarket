@@ -35,6 +35,11 @@ const mainNavItems: NavItem[] = [
 
 const rightNavItems: NavItem[] = [
     {
+        title: 'Search',
+        url: '/searched',
+        icon: Search,
+    },
+    {
         title: 'Our Repository AutoMarket',
         url: 'https://github.com/Ixtervic/AutoMarket',
         icon: Folder,
