@@ -51,6 +51,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const page = usePage<SharedData>();
     const { auth } = page.props;
     const getInitials = useInitials();
+    const userName = auth.user ? auth.user.name : 'Invitado';
     return (
         <>
             <div className="border-sidebar-border/80 border-b">
@@ -157,21 +158,30 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                 ))}
                             </div>
                         </div>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="size-10 rounded-full p-1">
-                                    <Avatar className="size-8 overflow-hidden rounded-full">
-                                        <AvatarImage src={auth.user.avatar} alt={auth.user.name} />
-                                        <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
-                                            {getInitials(auth.user.name)}
-                                        </AvatarFallback>
-                                    </Avatar>
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="w-56" align="end">
-                                <UserMenuContent user={auth.user} />
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        {auth.user ? (
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" className="size-10 rounded-full p-1">
+                                        <Avatar className="size-8 overflow-hidden rounded-full">
+                                            <AvatarImage src={auth.user.avatar} alt={userName} />
+                                            <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                                                {getInitials(userName)}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="w-56" align="end">
+                                    <UserMenuContent user={auth.user} />
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        ) : (
+                            <Link
+                                href={route('login')}
+                                className="bg-destructive inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]"
+                            >
+                                Log in
+                            </Link>
+                        )}
                     </div>
                 </div>
             </div>
