@@ -12,6 +12,21 @@ class Product extends Model
     /** @use HasFactory<\Database\Factories\ProductFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'user_id',
+        'title',
+        'description',
+        'price',
+        'year',
+        'mileage',
+        'fuel_type',
+        'transmission',
+        'brand_id',
+        'category_id',
+        'location_id',
+        'image_path',
+    ];
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
