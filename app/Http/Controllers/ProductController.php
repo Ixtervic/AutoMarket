@@ -33,34 +33,28 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         // Validar la solicitud
-        $validatedData = $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
+            'brand_id' => 'required|exists:brands,id',
+            'model' => 'required|string|max:255',
             'year' => 'required|integer|min:1900|max:' . date('Y'),
             'mileage' => 'required|string',
             'fuel_type' => 'required|string',
             'transmission' => 'required|string',
-            'brand_id' => 'required|exists:brands,id',
+            'price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
             'location_id' => 'required|exists:locations,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Crear el producto con los datos validados
-        $product = new Product($validatedData);
+        $product = new Product($validated);
         $product->user_id = Auth::id();
-
-        // Guardar la imagen si se proporciona
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images/products', 'public');
-            $product->image_path = $imagePath;
-        }
 
         $product->save();
 
         return redirect()->route('dashboard')->with('success', 'Vehículo publicado exitosamente.');
     }
+
 
     /**
      * Display the specified product.

@@ -22,8 +22,8 @@ Route::get('dashboard', function () {
 
 // Ruta para acceder al formulario de producto
 Route::middleware(['auth'])->group(function () {
-    Route::get('/products/create', [ProductController::class, 'index'])->name('products.create');
-    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+    Route::post('/products/create', [ProductController::class, 'store'])->name('products.store');
 });
 
 Route::get('/searched', [SearchController::class, 'search'])->name('search');

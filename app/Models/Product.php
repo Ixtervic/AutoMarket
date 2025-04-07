@@ -13,18 +13,17 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
         'title',
         'description',
-        'price',
+        'brand_id',
+        'model',
         'year',
         'mileage',
         'fuel_type',
         'transmission',
-        'brand_id',
+        'price',
         'category_id',
         'location_id',
-        'image_path',
     ];
 
     public function category(): BelongsTo

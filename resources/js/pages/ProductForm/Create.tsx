@@ -1,6 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
-import { FormEventHandler } from 'react';
+import { useRef } from 'react';
 
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
@@ -37,10 +37,14 @@ export default function ProductForm() {
         location_id: '',
     });
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
+    const fileInput = useRef<HTMLInputElement>(null);
+
+    const submit = () => {
         post(route('products.store'), {
-            onFinish: () => reset(),
+            forceFormData: true,
+            onFinish: () => {
+                console.log('Formulario enviado');
+            },
         });
     };
 
