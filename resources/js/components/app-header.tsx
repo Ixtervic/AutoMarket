@@ -11,7 +11,7 @@ import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookText, CarFront, Folder, LayoutGrid, Menu, Search } from 'lucide-react';
+import { BookText, CarFront, Database, Folder, LayoutGrid, Menu, PanelLeft, Search, UserRoundPen } from 'lucide-react';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
 
@@ -33,10 +33,31 @@ const mainNavItems: NavItem[] = [
     },
 ];
 
+const mainNavItemsAdmin: NavItem[] = [
+    {
+        title: 'Panel',
+        url: '/admin/panel',
+        icon: PanelLeft,
+    },
+    {
+        title: 'Users',
+        url: '/admin/users',
+        icon: UserRoundPen,
+    },
+];
+
 const rightNavItems: NavItem[] = [
     {
         title: 'Our Repository AutoMarket',
         url: 'https://github.com/Ixtervic/AutoMarket',
+        icon: Database,
+    },
+];
+
+const rightNavItemsAdmin: NavItem[] = [
+    {
+        title: 'Our Data Base automarketdb',
+        url: 'http://localhost/phpmyadmin/index.php?route=/database/structure&db=automarketdb',
         icon: Folder,
     },
 ];
@@ -52,6 +73,10 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const { auth } = page.props;
     const getInitials = useInitials();
     const userName = auth.user ? auth.user.name : 'Invitado';
+    const user = auth.user;
+    const mainItems = user?.admin ? mainNavItemsAdmin : mainNavItems;
+    const rightItems = user?.admin ? rightNavItemsAdmin : rightNavItems;
+
     return (
         <>
             <div className="border-sidebar-border/80 border-b">
@@ -72,7 +97,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                 <div className="flex h-full flex-1 flex-col space-y-4 p-4">
                                     <div className="flex h-full flex-col justify-between text-sm">
                                         <div className="flex flex-col space-y-4">
-                                            {mainNavItems.map((item) => (
+                                            {mainItems.map((item) => (
                                                 <Link key={item.title} href={item.url} className="flex items-center space-x-2 font-medium">
                                                     {item.icon && <Icon iconNode={item.icon} className="h-5 w-5" />}
                                                     <span>{item.title}</span>
@@ -81,7 +106,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                         </div>
 
                                         <div className="flex flex-col space-y-4">
-                                            {rightNavItems.map((item) => (
+                                            {rightItems.map((item) => (
                                                 <a
                                                     key={item.title}
                                                     href={item.url}
@@ -108,7 +133,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                     <div className="ml-6 hidden h-full items-center space-x-6 lg:flex">
                         <NavigationMenu className="flex h-full items-stretch">
                             <NavigationMenuList className="flex h-full items-stretch space-x-2">
-                                {mainNavItems.map((item, index) => (
+                                {mainItems.map((item, index) => (
                                     <NavigationMenuItem key={index} className="relative flex h-full items-center">
                                         <Link
                                             href={item.url}
@@ -136,7 +161,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                 <Search className="!size-5 opacity-80 group-hover:opacity-100" />
                             </Button>
                             <div className="hidden lg:flex">
-                                {rightNavItems.map((item) => (
+                                {rightItems.map((item) => (
                                     <TooltipProvider key={item.title} delayDuration={0}>
                                         <Tooltip>
                                             <TooltipTrigger>
