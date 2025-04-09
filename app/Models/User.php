@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin', 
     ];
 
     /**
@@ -45,4 +46,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * The attributes that should have default values.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'is_admin' => false, // Valor por defecto para el campo is_admin.
+    ];
+
 }

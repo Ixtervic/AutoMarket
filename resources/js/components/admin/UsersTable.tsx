@@ -1,8 +1,8 @@
 //import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@headlessui/react';
-import { router } from '@inertiajs/react';
-import { Trash2 } from 'lucide-react';
+import { Link, router } from '@inertiajs/react';
+import { Pencil, Trash2 } from 'lucide-react';
 import React from 'react';
 
 interface User {
@@ -33,15 +33,13 @@ const UsersTable: React.FC<UsersTableProps> = ({ users = [] }) => {
                                 <td className="px-4 py-2">{user.name}</td>
                                 <td className="px-4 py-2">{user.email}</td>
                                 <td className="px-4 py-2">
-                                    {/* <Button variant="outline" onClick={() => onClickEdit(user)}>
-                                        Editar
-                                    </Button> */}
-                                    {/* Formulario para la eliminación */}
-                                    {/* <form method="POST" action={`/admin/users/${user.id}`} className="inline">
-                                        <Button type="submit" variant="outline" className="ml-2">
-                                            Eliminar
-                                        </Button>
-                                    </form> */}
+                                    <Link
+                                        as="button"
+                                        className="ms-2 cursor-pointer rounded-md bg-blue-600 p-2 text-white hover:opacity-80"
+                                        href={route('AdminUsers.edit', user.id)}
+                                    >
+                                        <Pencil size={20} />
+                                    </Link>
                                     <Button
                                         as="button"
                                         className="ms-2 cursor-pointer rounded-md bg-red-600 p-2 text-white hover:opacity-80"

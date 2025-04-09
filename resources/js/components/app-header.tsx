@@ -11,7 +11,7 @@ import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookText, CarFront, Database, Folder, LayoutGrid, Menu, PanelLeft, Search, UserRoundPen } from 'lucide-react';
+import { BookText, BookUser, CarFront, Database, Folder, LayoutGrid, Menu, PanelLeft, Search } from 'lucide-react';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
 
@@ -41,8 +41,8 @@ const mainNavItemsAdmin: NavItem[] = [
     },
     {
         title: 'Users',
-        url: '/admin/users',
-        icon: UserRoundPen,
+        url: '/AdminUsers',
+        icon: BookUser,
     },
 ];
 
@@ -50,7 +50,7 @@ const rightNavItems: NavItem[] = [
     {
         title: 'Our Repository AutoMarket',
         url: 'https://github.com/Ixtervic/AutoMarket',
-        icon: Database,
+        icon: Folder,
     },
 ];
 
@@ -58,7 +58,7 @@ const rightNavItemsAdmin: NavItem[] = [
     {
         title: 'Our Data Base automarketdb',
         url: 'http://localhost/phpmyadmin/index.php?route=/database/structure&db=automarketdb',
-        icon: Folder,
+        icon: Database,
     },
 ];
 
@@ -74,8 +74,9 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const getInitials = useInitials();
     const userName = auth.user ? auth.user.name : 'Invitado';
     const user = auth.user;
-    const mainItems = user?.admin ? mainNavItemsAdmin : mainNavItems;
-    const rightItems = user?.admin ? rightNavItemsAdmin : rightNavItems;
+    const isAdmin = user && (user.is_admin === true || user.is_admin === 1 || user.is_admin === '1');
+    const mainItems = isAdmin ? mainNavItemsAdmin : mainNavItems;
+    const rightItems = isAdmin ? rightNavItemsAdmin : rightNavItems;
 
     return (
         <>

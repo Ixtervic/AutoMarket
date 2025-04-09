@@ -23,20 +23,9 @@ Route::get('dashboard', function () {
 /*
  //Admin routes
 */
-// Route::middleware(['auth', 'verified'])->group(function () {
-//     Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.users.index');
-// });
-
-// Route::middleware(['auth', 'verified'])->group(function () {
-//     Route::resource('admin/users', AdminController::class)->only(['index', 'update', 'destroy']);
-// });
-
-// Route::resource('AdminUser',AdminController::class)
-//     ->only(['index', 'store', 'update', 'destroy'])
-//     ->middleware(['auth','verified']);
 
 Route::resource('AdminUsers', AdminController::class)
-    ->only(['index', 'store', 'update', 'destroy'])
+    ->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'])
     ->parameters(['AdminUsers' => 'user']) // <-- aquí indicamos que el parámetro será 'user'
     ->middleware(['auth', 'verified']);
 

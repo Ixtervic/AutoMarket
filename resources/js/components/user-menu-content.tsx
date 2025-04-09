@@ -11,10 +11,11 @@ interface UserMenuContentProps {
 
 export function UserMenuContent({ user }: UserMenuContentProps) {
     const cleanup = useMobileNavigation();
+    const isAdmin = user && (user.is_admin === true || user.is_admin === 1 || user.is_admin === '1');
 
     return (
         <>
-            {user.admin ? (
+            {isAdmin ? (
                 <>
                     <DropdownMenuLabel className="p-0 font-normal">
                         <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
@@ -39,7 +40,7 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                        <Link className="block w-full" href={route('admin.users')} as="button" onClick={cleanup}>
+                        <Link className="block w-full" href={route('AdminUsers.index')} as="button" onClick={cleanup}>
                             <LogOut className="mr-2" />
                             AdminPanel
                         </Link>
