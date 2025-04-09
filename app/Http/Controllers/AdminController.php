@@ -129,7 +129,7 @@ class AdminController extends Controller
             // return redirect()->back()->with('success', 'Usuario eliminado correctamente');
         }
 
-        return redirect(route('AdminUsers.index'))->with('success', 'Usuario eliminado correctamente');
+        return redirect(route('AdminUsers.index'))->with('success', 'No se encuentra el usuario a eliminar');
     }
 
 
