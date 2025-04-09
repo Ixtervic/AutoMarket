@@ -22,8 +22,13 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Used cars',
-        url: '/',
+        title: 'Add Car For Sale',
+        url: '/products/create',
+        icon: CarFront,
+    },
+    {
+        title: 'Productos',
+        url: '/products/index',
         icon: CarFront,
     },
     {

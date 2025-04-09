@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 
 class ProductController extends Controller
 {
@@ -16,7 +17,9 @@ class ProductController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('ProductForm/Index');
+        return Inertia::render('ProductForm/index', [
+            'products' => Product::select()->latest()->get(),
+        ]);
     }
 
     /**
@@ -61,8 +64,28 @@ class ProductController extends Controller
      */
     public function show(Product $product): Response
     {
+        $product->load(['user', 'image']); // Carga la relación del usuario y la imagen si la usas
+
         return Inertia::render('ProductForm/Show', [
-            'product' => $product->load(['brand', 'category', 'location', 'user']),
+            'product' => [
+                'id' => $product->id,
+                'title' => $product->title,
+                'description' => $product->description,
+                'brand_id' => $product->brand_id,
+                'model' => $product->model,
+                'year' => $product->year,
+                'mileage' => $product->mileage,
+                'fuel_type' => $product->fuel_type,
+                'transmission' => $product->transmission,
+                'price' => $product->price,
+                'category_id' => $product->category_id,
+                'location_id' => $product->location_id,
+                'image' => $product->image ? asset('storage/' . $product->image->url) : null, // si tienes imagen
+            ],
+            'user' => [
+                'name' => $product->user->name,
+                'email' => $product->user->email,
+            ],
         ]);
     }
 
