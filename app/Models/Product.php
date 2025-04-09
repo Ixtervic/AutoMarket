@@ -24,6 +24,7 @@ class Product extends Model
         'fuel_type',
         'transmission',
         'price',
+        'user_id',
         'category_id',
         'location_id',
     ];

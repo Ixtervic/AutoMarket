@@ -10,24 +10,34 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
 
-class ProductController extends Controller
+class MyProductsController extends Controller
 {
     /**
-     * Display a listing of the products.
+     * Display a listing of the resource.
      */
     public function index(): Response
     {
-        return Inertia::render('Products/index', [
-            'products' => Product::select()->latest()->get(),
+        // $user = Auth::user();
+
+        // if (!$user) {
+        //     abort(403, 'No autenticado');
+        // }
+
+        // return Inertia::render('ProductsFromUser/Index', [
+        //     'products' => $user()->products()->latest()->get(),
+        // ]);
+        return Inertia::render('ProductsFromUser/Index', [
+            'products' => Product::where('user_id', Auth::id())
+                ->latest()->get(),
         ]);
     }
 
     /**
-     * Show the form for creating a new product.
+     * Show the form for creating a new resource.
      */
     public function create(): Response
     {
-        return Inertia::render('ProductForm/Create');
+        return Inertia::render('ProductsFromUser/Create');
     }
 
     /**
@@ -55,46 +65,23 @@ class ProductController extends Controller
 
         $product->save();
 
-        return redirect()->route('dashboard')->with('success', 'Vehículo publicado exitosamente.');
+        return redirect()->route('myproducts.index')->with('success', 'Vehículo publicado exitosamente.');
     }
 
-
     /**
-     * Display the specified product.
+     * Display the specified resource.
      */
-    public function show(Product $product): Response
+    public function show(Product $profile)
     {
-        $product->load(['user', 'image']); // Carga la relación del usuario y la imagen si la usas
-
-        return Inertia::render('Products/Show', [
-            'product' => [
-                'id' => $product->id,
-                'title' => $product->title,
-                'description' => $product->description,
-                'brand_id' => $product->brand_id,
-                'model' => $product->model,
-                'year' => $product->year,
-                'mileage' => $product->mileage,
-                'fuel_type' => $product->fuel_type,
-                'transmission' => $product->transmission,
-                'price' => $product->price,
-                'category_id' => $product->category_id,
-                'location_id' => $product->location_id,
-                'image' => $product->image ? asset('storage/' . $product->image->url) : null, // si tienes imagen
-            ],
-            'user' => [
-                'name' => $product->user->name,
-                'email' => $product->user->email,
-            ],
-        ]);
+        //
     }
 
     /**
-     * Show the form for editing the specified product.
+     * Show the form for editing the specified resource.
      */
     public function edit(Product $product): Response
     {
-        return Inertia::render('ProductForm/Edit', [
+        return Inertia::render('ProductsFromUser/Edit', [
             'product' => $product->load(['brand', 'category', 'location']),
         ]);
     }
@@ -152,4 +139,5 @@ class ProductController extends Controller
 
         return redirect()->route('products.index')->with('success', 'Vehículo eliminado exitosamente.');
     }
+
 }

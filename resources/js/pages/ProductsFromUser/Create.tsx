@@ -40,7 +40,7 @@ export default function ProductForm() {
     const fileInput = useRef<HTMLInputElement>(null);
 
     const submit = () => {
-        post(route('products.store'), {
+        post(route('product.store'), {
             forceFormData: true,
             onFinish: () => {
                 console.log('Formulario enviado');
