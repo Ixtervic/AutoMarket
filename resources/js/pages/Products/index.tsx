@@ -1,4 +1,5 @@
 import ShowProducts from '@/components/show-products';
+import SubscribedProductsCards from '@/components/SubscribedProductsCards';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
@@ -17,6 +18,7 @@ interface Product {
     price: number;
     category_id: string;
     location_id: string;
+    created_at: string;
 }
 
 interface PageProps {
@@ -24,16 +26,17 @@ interface PageProps {
         user: any;
     };
     products: Product[];
+    productsPremiun: Product[];
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Productos',
-        href: '/products/index',
+        href: '/products',
     },
 ];
 
-export default function Index({ products }: PageProps) {
+export default function Index({ products, productsPremiun }: PageProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Productos" />
@@ -43,6 +46,7 @@ export default function Index({ products }: PageProps) {
                     <h1 className="text-3xl font-semibold">Productos</h1>
                 </div>
 
+                <SubscribedProductsCards products={productsPremiun} />
                 <ShowProducts products={products} />
             </div>
         </AppLayout>

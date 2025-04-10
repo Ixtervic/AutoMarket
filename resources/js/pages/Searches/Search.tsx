@@ -1,17 +1,51 @@
-<div className="flex-row items-start justify-center gap-4 bg-gray-100 px-8 py-4 md:flex">
-    <div className="flex flex-col rounded bg-white px-4 py-4 sm:justify-center sm:pt-0">
-        <h2 className="mb-4 py-6 text-xl font-semibold text-gray-800">Resultados de búsqueda para "Ejemplo de búsqueda"</h2>
-        <div className="grid grid-cols-1 gap-2 rounded bg-white px-4 py-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-            {[1, 2, 3, 4, 5].map((index) => (
-                <div key={index} className="w-44 rounded-lg border p-4 shadow-sm transition-shadow hover:shadow-lg">
-                    <img src="./imgs/ejemplo.jpg" alt={`Producto ${index}`} className="mb-3 h-40 w-full rounded-md object-cover" />
-                    <h3 className="text-lg font-bold text-gray-800">Producto {index}</h3>
-                    <p className="text-gray-600">$100.00</p>
-                    <a href="#" className="mt-2 inline-block text-blue-500">
-                        Ver más
-                    </a>
+import ShowProducts from '@/components/show-products';
+import AppLayout from '@/layouts/app-layout';
+import { type BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/react';
+
+interface Product {
+    id: number;
+    image: string;
+    title: string;
+    description: string;
+    brand_id: string;
+    model: string;
+    year: number;
+    mileage: number;
+    fuel_type: string;
+    transmission: string;
+    price: number;
+    category_id: string;
+    location_id: string;
+    created_at: string;
+}
+
+interface PageProps {
+    auth: {
+        user: any;
+    };
+    products: Product[];
+    searched: string;
+}
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Search',
+        href: '/results',
+    },
+];
+
+export default function Search({ searched, products }: PageProps) {
+    return (
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title={`Resultados de búsqueda: ${searched}`} />
+
+            <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
+                <div className="mb-3 flex items-center justify-between">
+                    <h2 className="mt-4 text-xl font-semibold">Resultados para: {searched}</h2>
                 </div>
-            ))}
-        </div>
-    </div>
-</div>;
+                <ShowProducts products={products} />
+            </div>
+        </AppLayout>
+    );
+}

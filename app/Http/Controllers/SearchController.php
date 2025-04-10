@@ -1,27 +1,28 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Illuminate\Http\Response;
 
 class SearchController extends Controller
 {
-    public function search(Request $request)
+    public function search(Request $request, $searched = null)
     {
-        $query = $request->input('query');
-        $order = $request->input('order', 'asc'); // Por defecto ordena ascendente
+        $searched = $searched ?? $request->input('searched');
 
-        $products = Product::query()
-            ->where('name', 'like', "%{$query}%")
-            ->orWhere('id', 'like', "%{$query}%")
-            ->orderBy('price', $order)
-            ->get();
+        // Realizar la búsqueda parcial en el modelo Product
+        $products = Product::where('title', 'like', '%' . $searched . '%')
+                           ->orWhere('description', 'like', '%' . $searched . '%')
+                           ->orWhere('model', 'like', '%' . $searched . '%')
+                           ->orWhere('brand_id', 'like', '%' . $searched . '%')
+                           ->latest()
+                           ->get();
 
-        return inertia('Searches/Search', [
+        return Inertia::render('Searches/Search', [
+            'searched' => $searched,
             'products' => $products,
-            'query' => $query,
-            'order' => $order,
         ]);
     }
 }

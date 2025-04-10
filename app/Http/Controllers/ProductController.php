@@ -18,7 +18,8 @@ class ProductController extends Controller
     public function index(): Response
     {
         return Inertia::render('Products/index', [
-            'products' => Product::select()->latest()->get(),
+            'products' => Product::latest()->get(),
+            'productsPremiun' => Product::whereHas('user.suscription')->latest()->get(),
         ]);
     }
 

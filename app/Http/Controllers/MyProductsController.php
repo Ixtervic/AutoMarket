@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use Illuminate\Support\Facades\Log;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,27 +47,48 @@ class MyProductsController extends Controller
      */
     public function store(Request $request)
     {
-        // Validar la solicitud
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'brand_id' => 'required|exists:brands,id',
-            'model' => 'required|string|max:255',
-            'year' => 'required|integer|min:1900|max:' . date('Y'),
-            'mileage' => 'required|string',
-            'fuel_type' => 'required|string',
-            'transmission' => 'required|string',
-            'price' => 'required|numeric|min:0',
-            'category_id' => 'required|exists:categories,id',
-            'location_id' => 'required|exists:locations,id',
-        ]);
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'brand_id' => 'required|exists:brands,id',
+                'model' => 'required|string|max:255',
+                'year' => 'required|integer|min:1900|max:' . date('Y'),
+                'mileage' => 'required|string',
+                'fuel_type' => 'required|string',
+                'transmission' => 'required|string',
+                'price' => 'required|numeric|min:0',
+                'category_id' => 'required|exists:categories,id',
+                'location_id' => 'required|exists:locations,id',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
 
-        $product = new Product($validated);
-        $product->user_id = Auth::id();
+            $imagePath = null;
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('images/products', 'public');
+            }
 
-        $product->save();
+            $product = Product::create([
+                'user_id' => Auth::id(),
+                'title' => $validated['title'],
+                'description' => $validated['description'] ?? null,
+                'brand_id' => $validated['brand_id'],
+                'model' => $validated['model'],
+                'year' => $validated['year'],
+                'mileage' => $validated['mileage'],
+                'fuel_type' => $validated['fuel_type'],
+                'transmission' => $validated['transmission'],
+                'price' => $validated['price'],
+                'category_id' => $validated['category_id'],
+                'location_id' => $validated['location_id'],
+                'image_path' => $imagePath,
+            ]);
 
-        return redirect()->route('myproducts.index')->with('success', 'Vehículo publicado exitosamente.');
+            return redirect()->route('myproducts.index')->with('success', 'Vehículo publicado exitosamente.');
+        } catch (Exception $e) {
+            Log::error('Error al crear producto: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'No se pudo crear el producto. Inténtalo de nuevo.');
+        }
     }
 
     /**
@@ -81,9 +104,7 @@ class MyProductsController extends Controller
      */
     public function edit(Product $product): Response
     {
-        return Inertia::render('ProductsFromUser/Edit', [
-            'product' => $product->load(['brand', 'category', 'location']),
-        ]);
+        return Inertia::render('ProductsFromUser/Create', ['product' => $product, 'isEdit' => true]);
     }
 
     /**
@@ -91,36 +112,51 @@ class MyProductsController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-//        $this->authorize('update', $product);
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'brand_id' => 'required|exists:brands,id',
+                'model' => 'required|string|max:255',
+                'year' => 'required|integer|min:1900|max:' . date('Y'),
+                'mileage' => 'required|string',
+                'fuel_type' => 'required|string',
+                'transmission' => 'required|string',
+                'price' => 'required|numeric|min:0',
+                'category_id' => 'required|exists:categories,id',
+                'location_id' => 'required|exists:locations,id',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
 
-        // Validar los datos actualizados
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'year' => 'required|integer|min:1900|max:' . date('Y'),
-            'mileage' => 'required|string',
-            'fuel_type' => 'required|string',
-            'transmission' => 'required|string',
-            'brand_id' => 'required|exists:brands,id',
-            'category_id' => 'required|exists:categories,id',
-            'location_id' => 'required|exists:locations,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+            // Actualización de campos
+            $product->update([
+                'title' => $validated['title'],
+                'description' => $validated['description'] ?? null,
+                'brand_id' => $validated['brand_id'],
+                'model' => $validated['model'],
+                'year' => $validated['year'],
+                'mileage' => $validated['mileage'],
+                'fuel_type' => $validated['fuel_type'],
+                'transmission' => $validated['transmission'],
+                'price' => $validated['price'],
+                'category_id' => $validated['category_id'],
+                'location_id' => $validated['location_id'],
+            ]);
 
-        // Actualizar los datos del producto
-        $product->update($validatedData);
-
-        // Si se sube una nueva imagen, eliminar la anterior y guardar la nueva
-        if ($request->hasFile('image')) {
-            if ($product->image_path) {
-                Storage::disk('public')->delete($product->image_path);
+            // Manejo de imagen si se sube una nueva
+            if ($request->hasFile('image')) {
+                if ($product->image_path) {
+                    Storage::disk('public')->delete($product->image_path);
+                }
+                $imagePath = $request->file('image')->store('images/products', 'public');
+                $product->update(['image_path' => $imagePath]);
             }
-            $imagePath = $request->file('image')->store('images/products', 'public');
-            $product->update(['image_path' => $imagePath]);
-        }
 
-        return redirect()->route('products.index')->with('success', 'Vehículo actualizado exitosamente.');
+            return redirect()->route('myproducts.index')->with('success', 'Vehículo actualizado exitosamente.');
+        } catch (Exception $e) {
+            Log::error('Error al actualizar producto: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'No se pudo actualizar el producto. Inténtalo de nuevo.');
+        }
     }
 
     /**
@@ -128,16 +164,18 @@ class MyProductsController extends Controller
      */
     public function destroy(Product $product)
     {
-        //$this->authorize('delete', $product);
+        try {
+            if ($product->image_path) {
+                Storage::disk('public')->delete($product->image_path);
+            }
 
-        // Eliminar la imagen asociada si existe
-        if ($product->image_path) {
-            Storage::disk('public')->delete($product->image_path);
+            $product->delete();
+
+            return redirect()->back()->with('success', 'Producto eliminado exitosamente.');
+        } catch (Exception $e) {
+            Log::error('Error al eliminar producto: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'No se pudo eliminar el producto. Inténtalo de nuevo.');
         }
-
-        $product->delete();
-
-        return redirect()->route('products.index')->with('success', 'Vehículo eliminado exitosamente.');
     }
 
 }

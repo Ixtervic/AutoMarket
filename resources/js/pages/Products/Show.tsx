@@ -1,5 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
+import { MessageCircleMore } from 'lucide-react';
 
 interface Product {
     id: number;
@@ -87,6 +88,10 @@ export default function Show({ auth, product, user }: ShowProps) {
                         </p>
                         <p>
                             <strong>Email:</strong> {user.email}
+                        </p>
+                        <p>
+                            <MessageCircleMore />
+                            <span>7715251436</span>
                         </p>
                     </div>
                 </div>

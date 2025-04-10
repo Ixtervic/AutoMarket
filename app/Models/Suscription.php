@@ -11,6 +11,8 @@ class Suscription extends Model
     /** @use HasFactory<\Database\Factories\SuscriptionFactory> */
     use HasFactory;
 
+    protected $table = 'subscriptions';
+
     public function paymentMethod(): BelongsTo
     {
         return $this->belongsTo(PaymentMethod::class);

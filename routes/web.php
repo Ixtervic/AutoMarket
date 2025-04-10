@@ -23,16 +23,18 @@ Route::get('dashboard', function () {
 
 // Ruta para acceder al formulario de producto
 Route::middleware(['auth'])->group(function () {
-    Route::get('/myproducts/index', [MyProductsController::class, 'index'])->name('myproducts.index');
+    Route::get('/myproducts', [MyProductsController::class, 'index'])->name('myproducts.index');
     Route::get('/products/create', [MyProductsController::class, 'create'])->name('product.create');
     Route::post('/products/create', [MyProductsController::class, 'store'])->name('product.store');
-    
+    Route::get('/products/{product}/edit', [MyProductsController::class, 'edit'])->name('product.edit');
+    Route::put('/products/{product}', [MyProductsController::class, 'update'])->name('product.update');
+    Route::delete('/products/{product}', [MyProductsController::class, 'destroy'])->name('product.destroy');
 });
 
-Route::get('/products/index', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 
-Route::get('/searched', [SearchController::class, 'search'])->name('search');
+Route::get('/search/{searched?}', [SearchController::class, 'search'])->name('search.results');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
