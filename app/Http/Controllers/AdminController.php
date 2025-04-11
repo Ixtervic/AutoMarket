@@ -25,7 +25,7 @@ class AdminController extends Controller
             abort(403, 'No tienes permisos para acceder a esta sección.');
         }
 
-        return Inertia::render('Admin/Users/index', [
+        return Inertia::render('Admin/Users/Index', [
             'users' => User::select()->get(),
         ]);
     }
