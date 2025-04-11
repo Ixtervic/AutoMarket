@@ -1,5 +1,6 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { Icon } from '@/components/icon';
+import SearchBar from '@/components/search-bar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -11,7 +12,7 @@ import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookText, CarFront, Folder, LayoutGrid, Menu, Search } from 'lucide-react';
+import { CarFront, LayoutGrid, Menu } from 'lucide-react';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
 
@@ -22,24 +23,23 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Used cars',
-        url: '/',
+        title: 'Add Car For Sale',
+        url: '/products/create',
         icon: CarFront,
     },
     {
-        title: 'Catalog',
-        url: '/',
-        icon: BookText,
+        title: 'Productos',
+        url: '/products',
+        icon: CarFront,
+    },
+    {
+        title: 'My Products',
+        url: '/myproducts',
+        icon: CarFront,
     },
 ];
 
-const rightNavItems: NavItem[] = [
-    {
-        title: 'Our Repository AutoMarket',
-        url: 'https://github.com/Ixtervic/AutoMarket',
-        icon: Folder,
-    },
-];
+const rightNavItems: NavItem[] = [];
 
 const activeItemStyles = 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100';
 
@@ -50,6 +50,7 @@ interface AppHeaderProps {
 export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const page = usePage<SharedData>();
     const { auth } = page.props;
+    console.log(auth);
     const getInitials = useInitials();
     const userName = auth.user ? auth.user.name : 'Invitado';
     return (
@@ -132,9 +133,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
 
                     <div className="ml-auto flex items-center space-x-2">
                         <div className="relative flex items-center space-x-1">
-                            <Button variant="ghost" size="icon" className="group h-9 w-9 cursor-pointer">
-                                <Search className="!size-5 opacity-80 group-hover:opacity-100" />
-                            </Button>
+                            <SearchBar />
                             <div className="hidden lg:flex">
                                 {rightNavItems.map((item) => (
                                     <TooltipProvider key={item.title} delayDuration={0}>
