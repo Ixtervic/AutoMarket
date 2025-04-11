@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\MyProductsController;
 use App\Http\Controllers\SearchController;
@@ -35,6 +36,16 @@ Route::get('/products', [ProductController::class, 'index'])->name('products.ind
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 
 Route::get('/search/{searched?}', [SearchController::class, 'search'])->name('search.results');
+
+
+/*
+ //Admin routes
+*/
+
+Route::resource('AdminUsers', AdminController::class)
+    ->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'])
+    ->parameters(['AdminUsers' => 'user']) // <-- aquí indicamos que el parámetro será 'user'
+    ->middleware(['auth', 'verified']);
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

@@ -20,8 +20,12 @@ class DatabaseSeeder extends Seeder
         Product::factory(20)->create();
 
         // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
+        //     'name' => 'Admin1',
+        //     'email' => 'admin@example.com',
+        //     'password' => bcrypt('admin123'),
+        //     'email_verified_at' => now(),
+        //     'is_admin' => true
         // ]);
+        User::factory(15)->create();
     }
 }
